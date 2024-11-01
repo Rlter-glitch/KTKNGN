@@ -144,20 +144,31 @@
         };
 
         function compareTexts(original, user) {
-            const originalWords = original.split(/\s+/);
-            const userWords = user.split(/\s+/);
+            const originalLines = original.split('\n');
+            const userLines = user.split('\n');
             let result = '';
 
-            const maxLength = Math.max(originalWords.length, userWords.length);
+            const maxLength = Math.max(originalLines.length, userLines.length);
 
             for (let i = 0; i < maxLength; i++) {
-                const originalWord = originalWords[i] || '';
-                const userWord = userWords[i] || '';
+                const originalLine = originalLines[i] || '';
+                const userLine = userLines[i] || '';
 
-                if (userWord === originalWord) {
-                    result += `<span class="correct">${originalWord}</span> `;
+                if (userLine === originalLine) {
+                    result += `<span class="correct">${originalLine}</span><br>`;
                 } else {
-                    result += `<span class="incorrect">${userWord || originalWord}</span> `;
+                    const maxWords = Math.max(originalLine.split(/\s+/).length, userLine.split(/\s+/).length);
+                    for (let j = 0; j < maxWords; j++) {
+                        const originalWord = originalLine.split(/\s+/)[j] || '';
+                        const userWord = userLine.split(/\s+/)[j] || '';
+
+                        if (userWord === originalWord) {
+                            result += `<span class="correct">${originalWord}</span> `;
+                        } else {
+                            result += `<span class="incorrect">${userWord || originalWord}</span> `;
+                        }
+                    }
+                    result += '<br>';
                 }
             }
 
