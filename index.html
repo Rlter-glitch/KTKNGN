@@ -72,6 +72,11 @@
             background-color: #f8f9fa;
             min-height: 40px;
         }
+        .alert {
+            color: #007bff;
+            margin-top: 10px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -82,6 +87,7 @@
             <h2>Nhập đoạn văn bản cần nhớ:</h2>
             <textarea id="memory-input" rows="4" placeholder="Nhập văn bản tại đây..."></textarea><br>
             <button id="save-button">Ghi Nhớ</button>
+            <div id="success-message" class="alert hidden">Đã ghi nhớ đoạn văn bản!</div>
         </div>
         
         <div id="check-section" class="hidden">
@@ -102,6 +108,7 @@
         const checkButton = document.getElementById('check-button');
         const resultDiv = document.getElementById('result');
         const backButton = document.getElementById('back-button');
+        const successMessage = document.getElementById('success-message');
         
         let memoryText = '';
 
@@ -112,6 +119,7 @@
                 checkSection.classList.remove('hidden');
                 memoryInput.parentElement.classList.add('hidden');
                 checkInput.focus();
+                successMessage.classList.remove('hidden');
             } else {
                 alert('Vui lòng nhập đoạn văn bản cần nhớ!');
             }
@@ -132,24 +140,28 @@
             memoryInput.parentElement.classList.remove('hidden');
             checkInput.value = '';
             resultDiv.innerHTML = '';
+            successMessage.classList.add('hidden');
         };
 
         function compareTexts(original, user) {
-            const maxLength = Math.max(original.length, user.length);
+            const originalWords = original.split(/\s+/);
+            const userWords = user.split(/\s+/);
             let result = '';
 
+            const maxLength = Math.max(originalWords.length, userWords.length);
+
             for (let i = 0; i < maxLength; i++) {
-                const originalChar = original[i] || '';
-                const userChar = user[i] || '';
-                
-                if (userChar === originalChar) {
-                    result += `<span class="correct">${originalChar}</span>`;
+                const originalWord = originalWords[i] || '';
+                const userWord = userWords[i] || '';
+
+                if (userWord === originalWord) {
+                    result += `<span class="correct">${originalWord}</span> `;
                 } else {
-                    result += `<span class="incorrect">${originalChar}</span>`;
+                    result += `<span class="incorrect">${userWord || originalWord}</span> `;
                 }
             }
 
-            return result;
+            return result.trim();
         }
     </script>
 </body>
