@@ -3,177 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kiểm Tra Khả Năng Ghi Nhớ</title>
+    <title>Kiểm Tra Ghi Nhớ Phiên Bản 2.0</title>
     <style>
+        :root {
+            --primary: #4a90e2;
+            --error: #ff4757;
+            --text: #2d3436;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', system-ui, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #e9ecef;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            background: #f0f2f5;
+            min-height: 100vh;
         }
-        h1 {
-            color: #333;
-            margin-bottom: 20px;
-        }
+
         .container {
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            width: 90%;
-            max-width: 600px;
-            box-sizing: border-box;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            max-width: 800px;
+            margin: 2rem auto;
         }
-        textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            resize: none;
-            font-family: inherit;
-            font-size: 16px;
-            line-height: 1.5;
-            box-sizing: border-box;
+
+        h1 {
+            color: var(--text);
+            text-align: center;
+            margin-bottom: 2rem;
         }
-        button {
-            padding: 10px 15px;
-            margin-right: 10px;
-            cursor: pointer;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .correct {
-            color: green;
-            font-weight: bold;
-        }
-        .incorrect {
-            color: red;
-            font-weight: bold;
-        }
-        .hidden {
+
+        .section {
             display: none;
         }
-        #result {
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: #f8f9fa;
-            min-height: 40px;
+
+        .active {
+            display: block;
         }
-        .alert {
-            color: #007bff;
-            margin-top: 10px;
-            font-weight: bold;
+
+        textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-size: 1rem;
+            line-height: 1.6;
+            resize: vertical;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .primary-btn {
+            background: var(--primary);
+            color: white;
+        }
+
+        .secondary-btn {
+            background: #f1f3f5;
+            color: var(--text);
+        }
+
+        .highlight-error {
+            background: #ffebee;
+            color: var(--error);
+            padding: 2px 4px;
+            border-radius: 4px;
+            text-decoration: line-through;
+        }
+
+        #result {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            line-height: 1.8;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Kiểm Tra Khả Năng Ghi Nhớ</h1>
-        
-        <div id="memory-section">
-            <h2>Nhập đoạn văn bản cần nhớ:</h2>
-            <textarea id="memory-input" rows="4" placeholder="Nhập văn bản tại đây..."></textarea><br>
-            <button id="save-button">Ghi Nhớ</button>
-            <div id="success-message" class="alert hidden">Đã ghi nhớ đoạn văn bản!</div>
+        <h1>🔍 Kiểm Tra Khả Năng Ghi Nhớ</h1>
+
+        <!-- Phần nhập nội dung cần nhớ -->
+        <div id="memory-section" class="section active">
+            <textarea 
+                id="memory-input" 
+                rows="6" 
+                placeholder="Nhập nội dung bạn cần ghi nhớ..."
+                autofocus
+            ></textarea>
+            <div class="button-group">
+                <button class="primary-btn" id="save-btn">💾 Lưu và Bắt đầu</button>
+            </div>
         </div>
-        
-        <div id="check-section" class="hidden">
-            <h2>Nhập nội dung để kiểm tra:</h2>
-            <textarea id="check-input" rows="4" placeholder="Nhập nội dung kiểm tra tại đây..."></textarea><br>
-            <button id="check-button">Kiểm Tra</button>
-            <button id="back-button">Trở về trang chủ</button>
-            <h3>Kết quả:</h3>
+
+        <!-- Phần kiểm tra -->
+        <div id="check-section" class="section">
+            <textarea 
+                id="check-input" 
+                rows="6" 
+                placeholder="Nhập lại nội dung bạn đã ghi nhớ..."
+            ></textarea>
+            <div class="button-group">
+                <button class="primary-btn" id="check-btn">✅ Kiểm tra</button>
+                <button class="secondary-btn" id="back-btn">↩ Quay lại</button>
+            </div>
+
             <div id="result"></div>
         </div>
     </div>
 
     <script>
-        const memoryInput = document.getElementById('memory-input');
-        const saveButton = document.getElementById('save-button');
-        const checkSection = document.getElementById('check-section');
-        const checkInput = document.getElementById('check-input');
-        const checkButton = document.getElementById('check-button');
-        const resultDiv = document.getElementById('result');
-        const backButton = document.getElementById('back-button');
-        const successMessage = document.getElementById('success-message');
-        
-        let memoryText = '';
+        const app = {
+            originalText: "",
+            
+            init() {
+                this.cacheElements();
+                this.bindEvents();
+            },
 
-        saveButton.onclick = () => {
-            memoryText = memoryInput.value.trim();
-            if (memoryText) {
-                memoryInput.value = '';
-                checkSection.classList.remove('hidden');
-                memoryInput.parentElement.classList.add('hidden');
-                checkInput.focus();
-                successMessage.classList.remove('hidden');
-            } else {
-                alert('Vui lòng nhập đoạn văn bản cần nhớ!');
-            }
-        };
+            cacheElements() {
+                this.elements = {
+                    memorySection: document.getElementById('memory-section'),
+                    checkSection: document.getElementById('check-section'),
+                    memoryInput: document.getElementById('memory-input'),
+                    checkInput: document.getElementById('check-input'),
+                    resultDiv: document.getElementById('result'),
+                    saveBtn: document.getElementById('save-btn'),
+                    checkBtn: document.getElementById('check-btn'),
+                    backBtn: document.getElementById('back-btn')
+                };
+            },
 
-        checkButton.onclick = () => {
-            const userInput = checkInput.value.trim();
-            if (userInput === '') {
-                alert('Vui lòng nhập nội dung để kiểm tra!');
-                return;
-            }
-            const resultHTML = compareTexts(memoryText, userInput);
-            resultDiv.innerHTML = resultHTML;
-        };
+            bindEvents() {
+                this.elements.saveBtn.addEventListener('click', () => this.saveText());
+                this.elements.checkBtn.addEventListener('click', () => this.checkText());
+                this.elements.backBtn.addEventListener('click', () => this.showSection('memory'));
+            },
 
-        backButton.onclick = () => {
-            checkSection.classList.add('hidden');
-            memoryInput.parentElement.classList.remove('hidden');
-            checkInput.value = '';
-            resultDiv.innerHTML = '';
-            successMessage.classList.add('hidden');
-        };
+            saveText() {
+                this.originalText = this.elements.memoryInput.value.trim();
+                if (!this.originalText) return alert('Vui lòng nhập nội dung cần ghi nhớ!');
+                
+                this.showSection('check');
+                this.elements.checkInput.focus();
+            },
 
-        function compareTexts(original, user) {
-            const originalLines = original.split('\n');
-            const userLines = user.split('\n');
-            let result = '';
+            checkText() {
+                const userText = this.elements.checkInput.value.trim();
+                if (!userText) return alert('Vui lòng nhập nội dung để kiểm tra!');
+                
+                const resultHTML = this.highlightErrors(this.originalText, userText);
+                this.elements.resultDiv.innerHTML = resultHTML;
+            },
 
-            const maxLength = Math.max(originalLines.length, userLines.length);
+            highlightErrors(original, user) {
+                const originalWords = original.split(/\s+/);
+                const userWords = user.split(/\s+/);
+                
+                return originalWords.map((word, index) => {
+                    const userWord = userWords[index];
+                    const isCorrect = userWord === word;
+                    
+                    return isCorrect ? 
+                        word : 
+                        `<span class="highlight-error">${word}</span>`;
+                }).join(' ');
+            },
 
-            for (let i = 0; i < maxLength; i++) {
-                const originalLine = originalLines[i] || '';
-                const userLine = userLines[i] || '';
-
-                if (userLine === originalLine) {
-                    result += `<span class="correct">${originalLine}</span><br>`;
-                } else {
-                    const maxWords = Math.max(originalLine.split(/\s+/).length, userLine.split(/\s+/).length);
-                    for (let j = 0; j < maxWords; j++) {
-                        const originalWord = originalLine.split(/\s+/)[j] || '';
-                        const userWord = userLine.split(/\s+/)[j] || '';
-
-                        if (userWord === originalWord) {
-                            result += `<span class="correct">${originalWord}</span> `;
-                        } else {
-                            result += `<span class="incorrect">${userWord || originalWord}</span> `;
-                        }
-                    }
-                    result += '<br>';
+            showSection(section) {
+                this.elements.memorySection.classList.toggle('active', section === 'memory');
+                this.elements.checkSection.classList.toggle('active', section === 'check');
+                
+                if (section === 'check') {
+                    this.elements.checkInput.value = '';
+                    this.elements.resultDiv.innerHTML = '';
                 }
             }
+        };
 
-            return result.trim();
-        }
+        app.init();
     </script>
 </body>
 </html>
